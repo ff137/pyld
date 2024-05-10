@@ -19,12 +19,36 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+        with:
+          repository: "ff137/pyld"
+          path: "pyld"
+
+      # Fetch test suite files
+      - uses: actions/checkout@v3
+        with:
+          repository: "w3c/json-ld-api"
+          path: "json-ld-api"
+
+      - uses: actions/checkout@v3
+        with:
+          repository: "w3c/json-ld-framing"
+          path: "json-ld-framing"
+
+      - uses: actions/checkout@v3
+        with:
+          repository: "json-ld/normalization"
+          path: "normalization"
+
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v3
         with:
           python-version: ${{ matrix.python-version }}
         continue-on-error: ${{ matrix.continue-on-error }}
+
       - name: Install dependencies
         run: pip install -q -r requirements.txt -r requirements.dev.txt --no-cache-dir --upgrade
+        working-directory: ./pyld
+
       - name: Run tests
         run: python tests/runtests.py
+        working-directory: ./pyld
