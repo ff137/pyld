@@ -1,0 +1,30 @@
+name: Python Testing
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [3.9.19, "3.10.14", "3.11.9", "3.12.3"]
+        include:
+          - python-version: "nightly"
+            continue-on-error: true
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+        continue-on-error: ${{ matrix.continue-on-error }}
+      - name: Install dependencies
+        run: pip install -q -r requirements.txt -r requirements.dev.txt --no-cache-dir --upgrade
+      - name: Run tests
+        run: python tests/runtests.py
