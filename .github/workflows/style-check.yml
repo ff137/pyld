@@ -1,10 +1,10 @@
 name: Python code style check
 
 on:
+  push:
+    branches: [master]
   pull_request:
-    branches:
-      - main
-      - development
+    branches: [master]
 
 jobs:
   style:
